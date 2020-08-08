@@ -1,0 +1,207 @@
+-- MariaDB dump 10.17  Distrib 10.4.13-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: dinbandon
+-- ------------------------------------------------------
+-- Server version	10.4.13-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `orderdetails`
+--
+
+DROP TABLE IF EXISTS `orderdetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orderdetails` (
+  `odId` int(11) NOT NULL AUTO_INCREMENT,
+  `oId` int(11) NOT NULL,
+  `uId` int(11) NOT NULL,
+  `pId` int(11) NOT NULL,
+  `amount` int(11) NOT NULL DEFAULT 1,
+  `odDesc` varchar(50) DEFAULT NULL,
+  `patYet` enum('y','n') NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`odId`),
+  KEY `fk_oId` (`oId`),
+  KEY `fk_uId` (`uId`),
+  KEY `fk_pId` (`pId`),
+  CONSTRAINT `fk_oId` FOREIGN KEY (`oId`) REFERENCES `orders` (`oId`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_pId` FOREIGN KEY (`pId`) REFERENCES `products` (`pId`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_uId` FOREIGN KEY (`uId`) REFERENCES `users` (`uId`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orderdetails`
+--
+
+LOCK TABLES `orderdetails` WRITE;
+/*!40000 ALTER TABLE `orderdetails` DISABLE KEYS */;
+INSERT INTO `orderdetails` VALUES (1,1,1,1,1,'不要淋肉湯','n'),(2,1,2,2,1,NULL,'y'),(3,2,3,5,1,NULL,'n'),(4,2,1,8,5,'都微糖少冰','n');
+/*!40000 ALTER TABLE `orderdetails` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orders` (
+  `oId` int(11) NOT NULL AUTO_INCREMENT,
+  `startTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `closeTime` datetime DEFAULT NULL,
+  `adminId` int(11) DEFAULT NULL,
+  `ifLock` enum('y','n') NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`oId`),
+  KEY `fk_adminID_uID` (`adminId`),
+  CONSTRAINT `fk_adminID_uID` FOREIGN KEY (`adminId`) REFERENCES `users` (`uId`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,'2020-08-08 22:28:14','2020-08-10 11:00:00',1,'n'),(2,'2020-08-08 22:28:14','2020-08-11 11:00:00',1,'y');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `products` (
+  `pId` int(11) NOT NULL AUTO_INCREMENT,
+  `rId` int(11) DEFAULT NULL,
+  `pName` varchar(20) DEFAULT NULL,
+  `pCategory` varchar(10) DEFAULT NULL,
+  `unitPrice` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pId`),
+  KEY `fk_rid` (`rId`),
+  CONSTRAINT `fk_rid` FOREIGN KEY (`rId`) REFERENCES `restuarants` (`rId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (1,1,'排骨便當','便當',80),(2,1,'控肉便當','便當',80),(3,1,'雞腿便當','便當',80),(4,2,'牛肉麵','麵類',90),(5,2,'酸辣湯餃','水餃/鍋貼',70),(6,3,'脆皮雞排','雞排',60),(7,3,'甜不辣','炸物點心',50),(8,4,'紅茶','茶類',30),(9,4,'黑糖鮮奶','奶類',55);
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rcategory`
+--
+
+DROP TABLE IF EXISTS `rcategory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rcategory` (
+  `rcId` int(11) NOT NULL AUTO_INCREMENT,
+  `rcName` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`rcId`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rcategory`
+--
+
+LOCK TABLES `rcategory` WRITE;
+/*!40000 ALTER TABLE `rcategory` DISABLE KEYS */;
+INSERT INTO `rcategory` VALUES (1,'中式便當'),(2,'麵食'),(3,'下午茶'),(4,'飲料'),(5,'火鍋'),(6,'其他');
+/*!40000 ALTER TABLE `rcategory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `restuarants`
+--
+
+DROP TABLE IF EXISTS `restuarants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `restuarants` (
+  `rId` int(11) NOT NULL AUTO_INCREMENT,
+  `rName` varchar(20) DEFAULT NULL,
+  `rAddress` varchar(50) DEFAULT NULL,
+  `rEmail` varchar(50) DEFAULT NULL,
+  `rTel` varchar(15) DEFAULT NULL,
+  `rOpentime` varchar(50) DEFAULT NULL,
+  `rCategory` int(11) DEFAULT NULL,
+  `rDesc` varchar(50) DEFAULT NULL,
+  `orderCondition` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`rId`),
+  KEY `fk_rCategory` (`rCategory`),
+  CONSTRAINT `fk_rCategory` FOREIGN KEY (`rCategory`) REFERENCES `rcategory` (`rcId`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `restuarants`
+--
+
+LOCK TABLES `restuarants` WRITE;
+/*!40000 ALTER TABLE `restuarants` DISABLE KEYS */;
+INSERT INTO `restuarants` VALUES (1,'御弁當','台灣大道三段99號B1',NULL,'04-2252-1717','1100-1930',1,'主餐附三菜一湯，可加減飯量(備註)','4個以上可外送'),(2,'金湯_老麵館','台中市黎明路二段336號',NULL,'04-2252-0277','1100-1930',2,'*大碗(飯,麵)一律加25元\r\n*冬粉與麵類同價(請註記)','$500以上可外送，1030前訂'),(3,'派克脆皮雞排-台中黎明店','臺中市南屯區永定里黎明路二段56號',NULL,'04 2385 0200\r\n','1100-2230',3,'雞排有四種口味,原味,梅粉,胡椒,辣味;雞排要切請註明','$200以上可外送'),(4,'可不可熟成紅茶 福星店','	\r\n台中市西屯區福星路649號',NULL,'04-27085116','1100-2130',4,'濃郁好喝的紅茶；冷露(冬瓜)\r\n可點無糖即不會另外加糖','$200以上可外送');
+/*!40000 ALTER TABLE `restuarants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `uId` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(20) DEFAULT NULL,
+  `uEmail` varchar(50) DEFAULT NULL,
+  `uPassword` varchar(20) DEFAULT NULL,
+  `nickName` varchar(20) DEFAULT NULL,
+  `uTel` varchar(15) DEFAULT NULL,
+  `uJoinDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `uAdmin` enum('y','n') NOT NULL DEFAULT 'n',
+  PRIMARY KEY (`uId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'owen5566','owen5566@mail.com','owen5566','Owen','0988-995-995','2020-08-08 22:28:13','y'),(2,'rb0229','rb0229@mail.com','rb0229','RB','0902-995-995','2020-08-08 22:28:13','n'),(3,'brave0727','brave0727@mail.com','brave0727','Brave','0904-995-995','2020-08-08 22:28:13','n');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-08-09  6:41:29
