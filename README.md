@@ -12,19 +12,14 @@
 > - nickName  (varchar(10))
 > - phone (varchar(11))
 > - joinDate (date)
-> - status (int)
-
-##### userStatus
-> - usId (int)
-> - usDesc (varchar(30))
+> - admin (enum(y,n)defualt n)
 
 ##### restuarants
 > - rId (int)
 > - rName (varchar(20))
 > - tel (varchar(11))
 > - address (varchar(30))
-> - openTime (time)
-> - closeTime (time)
+> - openTime (varchar(30))
 > - rCategory (int)
 > - rDesc (varchar(50))
 > - orderCondition (varchar(50))
@@ -46,7 +41,7 @@
 > - closeTime (time)
 > - destination ()
 > - adminId
-> - freight
+
 
 ##### orderdetails
 > - odId
@@ -56,4 +51,5 @@
 > - amount
 > - Desc
 > - PayYet
+> - 
 > - totalPrice
